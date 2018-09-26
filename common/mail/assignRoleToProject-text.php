@@ -1,4 +1,5 @@
 <?php
+use yii\helpers\Html;
 /**
  * @var $this \yii\web\View
  * @var $user \common\models\User
@@ -7,6 +8,6 @@
  */
 ?>
 
-Hello <?= $user->username ?>
+Hello <?= Html::encode ($user->username) ?>
 
 There are in project <?= $project->title ?> your role will be <?= $role?>

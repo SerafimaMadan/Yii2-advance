@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\base\InvalidParamException;
+use yii\log\FileTarget;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -72,7 +73,17 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+
+
+   //   Yii::info('successfully_get', 'user');
+    //  Yii::getLogger()->flush();
+        Yii::beginProfile($per - __FILE__.__LINE__);
+
+        $content = $this->render('index');
+        Yii::endProfile($per);
+        return $content;
+
+      //  return $this->render('index');
     }
 
     /**
@@ -91,6 +102,7 @@ class SiteController extends Controller
             return $this->goBack();
         } else {
             $model->password = '';
+
 
             return $this->render('login', [
                 'model' => $model,

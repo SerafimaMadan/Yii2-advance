@@ -8,10 +8,6 @@ use yii\base\Component;
 use yii\base\Event;
 
 
-
-
-
-
 class AssignRoleEvent extends Event
 {
     public $project;
@@ -30,6 +26,7 @@ class ProjectService extends Component
     /**
      * @param User $user
      * @param $role
+     * @param $project Project
      */
     public function assignRole(Project $project, User $user, $role){
         $event = new AssignRoleEvent();

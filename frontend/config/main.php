@@ -34,7 +34,13 @@ return [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error', 'warning', 'info'],
+                ],
+              [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['user'],
+                    //'logFiles' => '@runtime/logs/message.log'
                 ],
             ],
         ],

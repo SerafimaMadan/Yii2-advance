@@ -16,20 +16,22 @@ use yii\db\ActiveRecord;
  * @property Project $project
  * @property User $user
  */
-class Project_user extends ActiveRecord
+class ProjectUser extends ActiveRecord
 {
-    const ROlE_DEVELOPER = 'developer';
-    const ROlE_MANAGER = 'manager';
-    const ROlE_TESTER = 'tester';
+    const ROLE_DEVELOPER = 'developer';
+    const ROLE_MANAGER = 'manager';
+    const ROLE_TESTER = 'tester';
     const ROLES = [
-self::ROlE_DEVELOPER =>'разработчик',
-   self::ROlE_MANAGER => 'менеджер',
-   self::ROlE_TESTER => 'тестировщик'
+        self::ROLE_DEVELOPER => 'разработчик',
+        self::ROLE_MANAGER => 'менеджер',
+        self::ROLE_TESTER => 'тестировщик'
     ];
+
     public static function primaryKey()
     {
         return ['project_id', 'user_id', 'role'];
     }
+
     /**
      * {@inheritdoc}
      */

@@ -6,9 +6,13 @@ use common\models\User;
 use Yii;
 use common\models\Project;
 use backend\models\ProjectSearch;
+use yii\base\ErrorException;
+use yii\base\UserException;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
 
 
 
@@ -29,6 +33,15 @@ class ProjectController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+    ],
         ];
     }
 
@@ -69,7 +82,7 @@ class ProjectController extends Controller
     {
         $model = new Project();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($this->loadModel($model) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -84,15 +97,16 @@ class ProjectController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @param
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
         $projectUsers = $model->getUsersData();
 
-        if ($this->loadModel($model) && $model->save()) {
+        if ($this->loadModel($model) && $model->save())  {
 
-                if ($diffRoles = array_diff_assoc($model->getUsersData(), $projectUsers)){
+               if ($diffRoles = array_diff_assoc($model->getUsersData(), $projectUsers)){
                     foreach ($diffRoles as $userId => $diffRole) {
                         Yii::$app->projectService->assignRole($model, User::findOne($userId), $diffRole);
                     }
@@ -108,11 +122,22 @@ class ProjectController extends Controller
 private function loadModel(Project $model){
 
 
-        $data = Yii::$app->request->post($model->formName());
-        $projectUsers = $data[Project::RELATION_PROJECT_USERS] ?? null;
+        $data =  Yii::$app->request->post($model->formName());
+    $projectUsers = $data[Project::RELATION_PROJECT_USERS] ?? null;
+   ////     ob_start();
+    //    echo $model->formName();
+   //     echo "\r\n\r\n";
+   //     echo Project::RELATION_PROJECT_USERS;
+   //     echo "\r\n\r\n";
+   //     print_r($projectUsers);
+   //     $v_dump = ob_get_contents();
+   //     file_put_contents('d:\Temp\out.txt', $v_dump);
+
+
         if ($projectUsers !== null) {
-            $model->$projectUsers = $projectUsers === '' ? [] : $projectUsers;
+            $model->projectUsers = $projectUsers === '' ? [] : $projectUsers;
         }
+        return $model->load(Yii::$app->request->post());
 }
     /**
      * Deletes an existing Project model.

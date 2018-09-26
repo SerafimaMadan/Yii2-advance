@@ -10,12 +10,12 @@ use unclead\multipleinput\MultipleInput;
 /* @var $model common\models\Project */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $*/
+/* @var $ */
 ?>
 
 <div class="project-form">
 
-    <?php $form = \yii\bootstrap\ActiveForm::begin([ 'layout' => 'horizontal', 'fieldConfig' => [
+    <?php $form = \yii\bootstrap\ActiveForm::begin(['layout' => 'horizontal', 'fieldConfig' => [
         'horizontalCssClasses' => [
             'label' => 'col-sm-2',
             'offset' => 'col-sm-offset-4',
@@ -30,38 +30,39 @@ use unclead\multipleinput\MultipleInput;
 
     <?= $form->field($model, 'active')->dropDownList(Project::STATUSES) ?>
 
-    <?php if(!$model->isNewRecord) {?>
+    <?php if (!$model->isNewRecord) { ?>
 
-    <?= $form->field($model, Project::RELATION_PROJECT_USERS)->widget
-    (MultipleInput::className(), [
-            'id' => 'project-users-widget',
-        'max' => 10,
-        'min' => 0,
-        'addButtonPosition' => MultipleInput:: POS_HEADER,
-        'columns' => [
+        <?= $form->field($model, Project::RELATION_PROJECT_USERS)->
+        widget(MultipleInput::className(), [
+                'id' => 'project-users-widget',
+                'max' => 10,
+                'min' => 0,
+                'addButtonPosition' => MultipleInput:: POS_HEADER,
+                'columns' => [
 
-            [
-                    'name' => 'project_id',
-                'type' => 'hiddenInput',
-                'defaultValue' => $model->id,
-            ],
-            [
-                'name' => 'user_id',
-                'type' => 'dropDownList',
-                'title' => 'User',
-                'items' => \common\models\User::find()->select('username')->indexBy('id')->column(),
-            ],
-            [
-                'name' => 'role',
-                'type' => 'dropDownList',
-                'title' => 'Role',
-                'items' => \common\models\Project_user::ROLES,
-            ],
-],
-        ]
-        );}
-     ?>
-
+                    [
+                        'name' => 'project_id',
+                        'type' => 'hiddenInput',
+                        'defaultValue' => $model->id,
+                    ],
+                    [
+                        'name' => 'user_id',
+                        'type' => 'dropDownList',
+                        'title' => 'User',
+                        'items' => \common\models\User::find()->select('username')->
+                        indexBy('id')->column(),
+                    ],
+                    [
+                        'name' => 'role',
+                        'type' => 'dropDownList',
+                        'title' => 'Role',
+                        'items' => \common\models\ProjectUser::ROLES,
+                    ],
+                ],
+            ]
+        );
+    }
+    ?>
 
 
     <div class="form-group row">

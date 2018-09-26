@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Project;
 use frontend\models\ProjectSearch;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -28,9 +30,38 @@ class ProjectController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ];
     }
+    /**
+     * Lists all Project models.
+     * @return mixed
+     */
+    public function actionMy()
+    {
+       $searchModel = new ProjectSearch();
+   //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $dataProvider = new ActiveDataProvider([
+           'query' => Project::find()->joinWith(Project::RELATION_PROJECT_USERS)->where(['user_id' =>
+           Yii::$app->user->id]),
+        ]);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+           // var_dump($dataProvider)
+        ]
+        );
+    }
     /**
      * Lists all Project models.
      * @return mixed

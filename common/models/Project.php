@@ -6,8 +6,9 @@ use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use tests\models\ProjectUser;
+
 use yii\db\ActiveRecord;
+use common\models\ProjectUser;
 
 
 
@@ -25,10 +26,9 @@ use yii\db\ActiveRecord;
  * @property int $updated_by
  * @property int $created_at
  * @property int $updated_at
- *
  * @property User $creator
  * @property User $updater
- * @property ProjectUser $projectUser
+ * @property ProjectUser $projectUsers
  */
 class Project extends ActiveRecord
 {
@@ -58,8 +58,10 @@ class Project extends ActiveRecord
             [['description'], 'string'],
             [['created_by', 'updated_by', 'created_at', 'updated_at', 'active'], 'integer'],
             [['title'], 'string', 'max' => 255],
-            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
-            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
+            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' =>
+                User::className(), 'targetAttribute' => ['created_by' => 'id']],
+            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' =>
+                User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
     }
     public function behaviors()
@@ -117,9 +119,9 @@ class Project extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProjectUser()
+    public function getProjectUsers()
     {
-        return $this->hasOne(ProjectUser::className(), ['project_id' => 'id']);
+        return $this->hasMany(\common\models\ProjectUser::className(), ['project_id' => 'id']);
     }
     /**
      * @return \yii\db\ActiveQuery

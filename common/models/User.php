@@ -36,7 +36,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
     const STATUSES = [
-           self::STATUS_DELETED => 'удалён',
+        self::STATUS_DELETED => 'удалён',
         self::STATUS_ACTIVE => 'активен',
     ];
 
@@ -59,8 +59,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function behaviors()
     {
-        $host = Yii::$app->params['front.scheme'].Yii::$app->params[
-            'front.domain'];
+        $host = Yii::$app->params['front.scheme'] . Yii::$app->params['front.domain'];
         return [
             TimestampBehavior::className(),
             [
@@ -69,10 +68,10 @@ class User extends ActiveRecord implements IdentityInterface
                 'scenarios' => [self::SCENARIO_ADMIN_UPDATE, self::SCENARIO_ADMIN_CREATE],
                 //'placeholder' => '@frontend/web/upload/user/5.jpg',
                 'path' => '@frontend/web/upload/user/{id}',
-                'url' => $host.'/upload/user/{id}',
+                'url' => $host . '/upload/user/{id}',
 
                 'thumbs' => [
-                   self::AVATAR_PREVIEW => ['width' => 400, 'quality' => 90],
+                    self::AVATAR_PREVIEW => ['width' => 400, 'quality' => 90],
                     self::AVATAR_ICO => ['width' => 30, 'height' => 20],
                 ],
             ],
@@ -92,7 +91,7 @@ class User extends ActiveRecord implements IdentityInterface
                 'extensions' => ['jpg', 'gif', 'png'],
                 'minSize' => 1000,
                 'maxSize' => 1000000],
-            [['password'], 'string', 'min' =>4],
+            [['password'], 'string', 'min' => 4],
             [['password', 'email', 'username'], 'required', 'on' => self::SCENARIO_ADMIN_CREATE],
             [['email', 'username'], 'required', 'on' => self::SCENARIO_ADMIN_UPDATE],
 
@@ -221,10 +220,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function setPassword($password)
     {
-       // \yii\helpers\VarDumper::dump($password, 5, true);
-        if (!$password)[
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password)];
-        $this->_password = $password;
+        // \yii\helpers\VarDumper::dump($password, 5, true);
+        if (!$password) {
+            $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        }
+        $this->password = $password;
     }
 
     /**
@@ -250,27 +250,33 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
     public function fields()
     {
-        return ['id', 'name' => function(User $models) {
-          return $models-> username.' '.User::STATUSES[$models-> status];
+        return ['id', 'name' => function (User $models) {
+            return $models->username . ' ' . User::STATUSES[$models->status];
         }
         ];
     }
+
     public function extraFields()
     {
-        return['projectUsers', 'projects'];
+        return ['projectUsers', 'projects'];
     }
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProjectUsers(){
-        return $this-> hasMany(ProjectUser::className(), ['user_id' => 'id']);
+    public function getProjectUsers()
+    {
+        return $this->hasMany(ProjectUser::className(), ['user_id' => 'id']);
     }
+
     /**
      * @return ActiveQuery
      */
-    public function getProjects(){
+    public function getProjects()
+    {
         return $this->hasMany(Project::className(), ['id' => 'project_id'])->via('projectUsers');
     }
 }
