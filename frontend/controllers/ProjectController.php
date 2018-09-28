@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\query\ProjectQuery;
 use Yii;
 use common\models\Project;
 use frontend\models\ProjectSearch;
@@ -18,6 +19,7 @@ use yii\filters\VerbFilter;
  */
 class ProjectController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -45,37 +47,37 @@ class ProjectController extends Controller
      * Lists all Project models.
      * @return mixed
      */
-    public function actionMy()
+    public function actionIndex()
     {
+
        $searchModel = new ProjectSearch();
-   //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        $dataProvider = new ActiveDataProvider([
-           'query' => Project::find()->joinWith(Project::RELATION_PROJECT_USERS)->where(['user_id' =>
-           Yii::$app->user->id]),
-        ]);
-
-        return $this->render('index', [
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        /**
+         * @var $query ProjectQuery
+         */
+        $query = $dataProvider->query;
+        $query->byUser(Yii::$app->user->id);
+        $content = $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+        return $content;
+    //    $dataProvider = new ActiveDataProvider([
+      //     'query' => Project::find()->joinWith(Project::RELATION_PROJECT_USERS)->where(['user_id' =>
+        //   Yii::$app->user->id]),
+      //  ]);
+
+      //  return $this->render('index', [
+       //     'searchModel' => $searchModel,
+        //    'dataProvider' => $dataProvider,
            // var_dump($dataProvider)
-        ]
-        );
+       // ]
+       // );
     }
     /**
      * Lists all Project models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new ProjectSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 
     /**
      * Displays a single Project model.
@@ -90,12 +92,12 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
+  /*  /**
      * Creates a new Project model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+  /*  public function actionCreate()
     {
         $model = new Project();
 
@@ -115,7 +117,7 @@ class ProjectController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+ /*   public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
@@ -135,7 +137,7 @@ class ProjectController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+ /*   public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 

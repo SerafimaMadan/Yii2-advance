@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //  'filterModel' => $searchModel,
+          'filterModel' => $searchModel,
         'columns' => [
             //  ['class' => 'yii\grid\SerialColumn'],
             ['attribute' => 'title',
@@ -34,29 +34,41 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             ['attribute' => \common\models\Project::RELATION_PROJECT_USERS.'.role',
                 'value' => function (\common\models\Project $model) {
-                    return join(',',$model->getProjectUsers()->select('role')->column());
+                    return join(',', Yii::$app->projectService->getRoles($model, Yii::$app->user->identity));
                 },
                 'format' => 'Html',
             ],
             //  'id',
+            [
+                    'attribute' => 'active',
+                'filter' => \common\models\Project::STATUSES,
+                'value' => function(\common\models\Project $model){
+        return \common\models\Project::STATUSES[$model->active];
+                }
+            ],
            'description:ntext',
-            ['attribute' => 'created_by',
+            ['attribute' => 'Creator',
                 'value' => function (\common\models\Project $model) {
                     return Html::a($model->creator->username, ['user/view', 'id' => $model->creator->id]);
                 },
                 'format' => 'Html',
             ],
-          /*  ['attribute' => 'updated_by',
-                'value' => function (\common\models\Project $model) {
-                    return Html::a($model->updater, ['user/view', 'id' => $model->updater->id]);
-                }
-            ],*/
-          //  'created_by',
-         //   'updated_by',
+
+
+          [  'attribute' =>'Updater',
+              'value' => function (\common\models\Project $model){
+                  return Html::a($model->updater->username,
+
+                      ['user/view', 'id' => $model->updater->id]);
+              },
+              'format' => 'Html',
+
+
+          ],
             'created_at:datetime',
             'updated_at:datetime',
 
-            ['class' => 'yii\grid\ActionColumn'],
+          //  ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

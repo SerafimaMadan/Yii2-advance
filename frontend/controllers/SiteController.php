@@ -77,10 +77,10 @@ class SiteController extends Controller
 
    //   Yii::info('successfully_get', 'user');
     //  Yii::getLogger()->flush();
-        Yii::beginProfile($per - __FILE__.__LINE__);
+      //  Yii::beginProfile($per - __FILE__.__LINE__);
 
         $content = $this->render('index');
-        Yii::endProfile($per);
+      //  Yii::endProfile($per);
         return $content;
 
       //  return $this->render('index');

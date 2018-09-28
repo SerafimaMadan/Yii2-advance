@@ -9,7 +9,7 @@ use yii\behaviors\TimestampBehavior;
 
 use yii\db\ActiveRecord;
 use common\models\ProjectUser;
-
+use common\models\query\Project_UserQuery;
 
 
 
@@ -117,7 +117,8 @@ class Project extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return   Project_UserQuery | \yii\db\ActiveQuery
+     * @return
      */
     public function getProjectUsers()
     {

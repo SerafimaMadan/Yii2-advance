@@ -8,6 +8,7 @@ use yii\base\Component;
 use yii\base\Event;
 
 
+
 class AssignRoleEvent extends Event
 {
     public $project;
@@ -23,6 +24,12 @@ class ProjectService extends Component
 {
     const EVENT_ASSIGN_ROLE = 'event_assign_role';
 
+    public function getRoles(Project $project,User $user){
+        return $project->getProjectUsers()->byUser($user->id)->select('role')->column();
+    }
+    public function hasRoles(Project $project,User $user, $role){
+        return in_array($role, $this->getRoles($project, $user));
+    }
     /**
      * @param User $user
      * @param $role

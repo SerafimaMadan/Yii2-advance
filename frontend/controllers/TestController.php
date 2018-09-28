@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use yii\web\Controller;
 use yii\helpers\Url;
 use yii\helpers\VarDumper;
+use Yii;
 
 class TestController extends Controller
 {
@@ -12,8 +13,8 @@ class TestController extends Controller
         return $this->render('index', [
 
         ]);
-      \Yii::setAlias('@about', Url::to('site/about'));
+      Yii::setAlias('@about', Url::to('site/about'));
       return Url::to('@about');
-     return VarDumper::dumpAsString(\yii::$aliases, 10, true);
+     return VarDumper::dumpAsString(Yii::$aliases, 10, true);
     }
 }

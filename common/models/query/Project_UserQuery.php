@@ -2,21 +2,30 @@
 
 namespace common\models\query;
 
+
+use yii\db\ActiveQuery;
 /**
- * This is the ActiveQuery class for [[\common\models\Project_user]].
- *
- * @see \common\models\Project_user
+ * This is the ActiveQuery class for [[\common\models\ProjectUser]].
+ *This is the ActiveQuery class for [[\common\models\ProjectService]].
+ * @see \common\models\ProjectUser
  */
-class Project_UserQuery extends \yii\db\ActiveQuery
+class Project_UserQuery extends ActiveQuery
 {
     /*public function active()
     {
         return $this->andWhere('[[status]]=1');
     }*/
 
+    public function byUser($userId, $role = null){
+        $this->andWhere(['user_id' => $userId]);
+        if ($role) {
+            $this->andWhere(['role' => $role]);
+        }
+        return $this;
+    }
     /**
      * {@inheritdoc}
-     * @return \common\models\Project_user[]|array
+     * @return \common\models\ProjectUser[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +34,7 @@ class Project_UserQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Project_user|array|null
+     * @return \common\models\ProjectUser|array|null
      */
     public function one($db = null)
     {
